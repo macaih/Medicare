@@ -1,0 +1,104 @@
+package com.neusoft.hostpital.service;
+
+import java.util.List;
+
+import com.neusoft.hostpital.vo.AllAttribute;
+import com.neusoft.hostpital.vo.Armarium;
+import com.neusoft.hostpital.vo.Disease;
+import com.neusoft.hostpital.vo.Drugs;
+import com.neusoft.hostpital.vo.Project;
+import com.neusoft.hostpital.vo.User;
+
+public interface UserService {
+
+	User adminLogin(String userNo,String userPass);
+
+	boolean addOrdinaryUser(User user);
+
+	List<User> selectOrdinaryUser(String userNo);
+
+	boolean removeOrdinaryUser(int userId);
+
+	User selectOrdinaryUpdateUser(int userId);
+
+	boolean updateOrdinaryUser(User user);
+
+	boolean addAdminUser(User user);
+
+	List<User> selectAdminUserByNo(String userNo);
+
+	boolean removeAdminUser(int userId);
+
+	User selectAdminUpdateUser(int userId);
+
+	boolean updateAdminUser(User user);
+
+	List<User> selectIllUser(String userNo);
+
+	boolean removeIllUser(int userId);
+
+	List<AllAttribute> selectProjectByUserId(int userId);
+
+	List<AllAttribute> selectDiseaseByUserId(int userId);
+
+	boolean removeUserProject(int userId, int projectId);
+
+	boolean removeUserDisesase(int userId, int diseaseId);
+
+	boolean addUserRroject(int userId, String projectName, int time);
+
+	boolean addUserDisease(int userId, String diseaseName);
+
+	AllAttribute selectUserIdByUserNo(String userNo);
+
+	int isExist(String userNo);
+
+	boolean addIllUserDisease(int userId, String diseaseName);
+
+	boolean addIllUserRroject(int userId, String projectName, int time);
+	
+	public List<Double> calculation(String userNo);
+	
+	public User getUserNameAndNo(String userNo);
+	
+	void addProject(String a,String b,String c);
+	
+	boolean addProjectArm(String projectNo,String armName,int time);
+	
+	Project getProjectIdByNo(String projectNo);
+	
+	boolean addProjectDrugs(int projectId,String drugsName,int amount);
+	
+	List<Project> getLikeProject(String projectNo);
+	
+	List<AllAttribute> getDrugsByProjectId(int projectId);
+	
+	void removeProDrugs(int projectId,int drugsId);
+	
+	void delProject(int projectId);
+
+	User select_userNo(String userNo);
+	
+	int isExistUser2(String userNo);
+
+	List<AllAttribute> selectdrugN();
+
+	Project isExistProjectNo(String projectNo);
+	
+	Project isExistProjectName(String projectName);
+	
+	Disease isExistDiseaseName(String diseaseName);
+
+	AllAttribute ckdruname(String drugsName);
+	
+	Armarium isExistArmariumName(String armariumName);
+	
+	List<Armarium> getAllArmName();
+	
+	List<Drugs> getAllDrugsName();
+	
+	List<Disease> getAllDiseaseName();
+	
+	List<Project> getAllProjectName();
+
+}

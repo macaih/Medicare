@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.hostpital.dao.Project_ArmariumMapper">
+
+
+	<resultMap type="com.neusoft.hostpital.vo.Project_Armarium"
+		id="project_armariumResultMap">
+		<id property="project_id" column="project_id" />
+		<id property="armarium_id" column="armarium_id" />
+		<result property="armarium_name" column="armarium_name"/>
+		<result property="project_name" column="project_name" />
+		<result property="day" column="day" />
+
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="proArmResultMap">
+		<id property="projectId" column="project_id" />
+		<id property="armId" column="armarium_id" />
+		<result property="armNo" column="armarium_no" />
+		<result property="armName" column="armarium_name" />
+		<result property="proArmTime" column="day" />
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="ArmIdResultMap">
+		<result property="armId" column="armarium_id" />
+	</resultMap>
+
+	<select id="getArmIdByName" parameterType="String" resultMap="ArmIdResultMap">
+		select armarium_id from
+		armarium where armarium_name=#{armariumName}
+	</select>
+	
+	<select id="selectarmName" parameterType="com.neusoft.hostpital.vo.AllAttribute" resultMap="proArmResultMap">
+		select armarium_name from armarium 
+	</select>
+	
+	<select id="selectArmriumByProjectId" parameterType="int"
+		resultMap="proArmResultMap">
+		select
+		pa.project_Id,pa.armarium_id,a.armarium_no,a.armarium_name,day from
+		project_armarium pa,armarium a
+		where pa.armarium_id = a.armarium_id and
+		pa.project_id = #{projectId}
+	</select>
+
+	<!-- 获取项目ID -->
+	<select id="getProject_id" parameterType="com.neusoft.hostpital.vo.Project">
+		select project_id from
+		project where project_name=#{project_name}
+	</select>
+
+	<!-- 获取医疗设施ID -->
+	<select id="getArmarium_id" parameterType="com.neusoft.hostpital.vo.Armarium">
+		select armarium_id
+		from armarium where armarium_name=#{armariumName}
+	</select>
+
+	<!-- 添加中间表数据 -->
+	<insert id="addProArm" parameterType="com.neusoft.hostpital.vo.Project_Armarium"
+		useGeneratedKeys="true">
+		insert into
+		project_armarium(project_id,armarium_id,day)
+		values(#{param1},#{param2},#{param3})
+	</insert>
+
+	<!-- 删除中间表 -->
+	<delete id="removeProArm" parameterType="com.neusoft.hostpital.vo.Project_Armarium">
+		delete from
+		project_armarium where project_id = #{param1} and
+		armarium_id=#{param2}
+	</delete>
+
+
+	<select id="selectProjectname" parameterType="int"
+		resultMap="project_armariumResultMap">
+		select a.project_name,b.armarium_name ,c.*
+		from project
+		a,armarium b,project_armarium c
+		where a.project_id = c.project_id
+		in(#{project_id}) and b.armarium_id=c.armarium_id in
+		(select
+		armarium_id from project_armarium where project_id = #{project_id})
+	</select>
+
+
+</mapper>

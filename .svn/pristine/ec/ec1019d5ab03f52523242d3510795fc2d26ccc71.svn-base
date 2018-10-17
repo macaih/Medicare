@@ -1,0 +1,53 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>修改诊疗项目信息</title>
+		<link rel="stylesheet" href="css/reset2.css" />
+		<link rel="stylesheet" href="css/style2.css" media="screen" type="text/css" />
+
+</head>
+<body>
+
+		<div id="window" style="">
+			<div class="page page-front" style="width: 450px;height: 520px;">
+				<div class="page-content">
+					<form:form method="post" action="pro_update1" modelAttribute="pro">
+							<form:hidden path="project_id"/>
+						<div class="input-row">
+							<label class="label fadeIn delay2">诊疗项目编号</label>
+							<form:input path="project_no"  data-fyll="诊疗项目编号" class="input fadeIn delay3" style="font-size: 19px;"/>
+						</div>
+						<div class="input-row">
+							<label class="label fadeIn delay2">诊疗项目名称</label>
+							<form:input path="project_name" data-fyll="诊疗项目名称" class="input fadeIn delay3" style="font-size: 19px;"/>
+						</div>
+						<div class="input-row">
+							<label class="label fadeIn delay2">诊疗项目等级</label>
+							<form:input path="project_level" data-fyll="诊疗项目等级" class="input fadeIn delay3" style="font-size: 19px;"/>
+						</div>
+
+						<div class="input-row perspective">
+							<input  class="button load-btn fadeIn delay4 ion-arrow-right-b"  type="submit" value="确认修改"/> 
+      
+      <div class="load-state"> 
+        <div class="ball"></div> 
+        <div class="ball"></div> 
+        <div class="ball"></div> 
+       </div> </input>
+						</div>
+
+					</form:form>
+				</div>
+			</div>
+
+		</div>
+		</div>
+		</div>
+		</div>
+
+</body>
+</html>

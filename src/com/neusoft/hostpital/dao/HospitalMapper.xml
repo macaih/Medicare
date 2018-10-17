@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.hostpital.dao.HospitalMapper">
+	<resultMap type="com.neusoft.hostpital.vo.Hospital" id="hospitalResultMap">
+		<id property="hospital_id" column="hospital_id" />
+		<result property="hospital_no" column="hospital_no" />
+		<result property="hospital_name" column="hospital_name" />
+		<result property="hospital_level" column="hospital_level" />
+		<result property="hospital_phone" column="hospital_phone" />
+	</resultMap>
+	
+	<!-- 添加数据 -->
+  	<insert id="addHospital" parameterType="com.neusoft.hostpital.vo.Hospital"
+		useGeneratedKeys="true">
+		insert into
+		hospital(hospital_no,hospital_name,hospital_level,hospital_phone)
+		values(#{hospital_no},#{hospital_name},#{hospital_level},#{hospital_phone})
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="delectHospital" parameterType="int">
+		delete from hospital where hospital_id = #{id}
+	</delete>
+	
+	<!-- 修改 -->
+ 	<update id="updateHospital" parameterType="com.neusoft.hostpital.vo.Hospital">
+		update hospital set hospital_no=#{hospital_no},hospital_name=#{hospital_name},
+		hospital_level=#{hospital_level},hospital_phone=#{hospital_phone}
+		where hospital_id=#{hospital_id}
+	</update>
+	
+	<!-- 全查询 -->
+	<select id="selectAllHospital" resultMap="hospitalResultMap">
+		select * from hospital
+	</select>
+	
+	<!-- 单查询 -->
+	<select id="selectHospitalById" parameterType="int"  resultMap="hospitalResultMap">
+		select * from hospital where hospital_id = #{hospital_id}
+	</select>   
+	
+	<!-- 模糊查询 -->
+	<select id="selectOneH" parameterType="String" resultMap="hospitalResultMap">
+				select * from hospital where hospital_no like #{hospitalNo}
+	</select>
+	
+	<!-- 编号对比是否重复查询  -->
+	<select id="select_hospitalNo" parameterType="String" resultMap="hospitalResultMap">
+				select hospital_no from hospital where hospital_no=#{hospitalNo}
+	</select>
+</mapper>

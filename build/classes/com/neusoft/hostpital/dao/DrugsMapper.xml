@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.hostpital.dao.DrugsMapper">
+
+	<resultMap type="com.neusoft.hostpital.vo.Drugs" id="drugsResultMap">
+		<id property="drugs_id" column="drugs_id" />
+		<result property="drugs_no" column="drugs_no" />
+		<result property="drugs_name" column="drugs_name" />
+		<result property="drugs_type" column="drugs_type" />
+		<result property="drugs_price" column="drugs_price" />
+	</resultMap>
+		
+	<!-- 添加数据 -->
+  	<insert id="addDrugs" parameterType="com.neusoft.hostpital.vo.Drugs"
+		useGeneratedKeys="true">
+		insert into
+		drugs(drugs_no,drugs_name,drugs_type,drugs_price)
+		values(#{drugs_no},#{drugs_name},#{drugs_type},#{drugs_price})
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="delectProject_Drugs" parameterType="int">
+		delete from project_drugs where drugs_id = #{id}
+	</delete>
+	<delete id="delectDrugs" parameterType="int">
+		delete from drugs where drugs_id = #{id}
+	</delete>
+	
+	
+	<!-- 修改 -->
+ 	<update id="updateDrugs" parameterType="com.neusoft.hostpital.vo.Drugs">
+		update drugs set drugs_no=#{drugs_no},drugs_name=#{drugs_name},
+		drugs_type=#{drugs_type},drugs_price=#{drugs_price}
+		where drugs_id=#{drugs_id}
+	</update>
+	
+	<!-- 全查询 -->
+	<select id="selectAllDrugs" resultMap="drugsResultMap">
+		select * from drugs
+	</select>
+	
+	<!-- 单查询 -->
+	<select id="selectDrugsById" parameterType="int"  resultMap="drugsResultMap">
+		select * from drugs where drugs_id = #{id}
+	</select>
+	   
+	<!-- 异步模糊单查询 -->
+	<select id="selectOne11" parameterType="String" resultMap="drugsResultMap">
+				select * from drugs where drugs_no like #{drugsNo}
+	</select>
+		
+	<!-- 编号对比是否重复查询  -->
+	<select id="select_drugsNo" parameterType="String" resultMap="drugsResultMap">
+				select drugs_no from drugs where drugs_no=#{drugsNo}
+	</select>
+</mapper>

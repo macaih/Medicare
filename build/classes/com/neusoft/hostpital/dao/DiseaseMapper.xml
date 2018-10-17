@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neusoft.hostpital.dao.DiseaseMapper">
+
+
+	<resultMap type="com.neusoft.hostpital.vo.Disease" id="diseaseResultMap">
+		<id property="disease_id" column="disease_id" />
+		<result property="disease_no" column="disease_no" />
+		<result property="disease_name" column="disease_name" />
+	</resultMap>
+	<insert id="add" parameterType="com.neusoft.hostpital.vo.Disease"
+		useGeneratedKeys="true">
+		insert into
+		disease(disease_no,disease_name)
+		values(#{disease_no},#{disease_name})
+	</insert>
+
+
+	<select id="selectAll" resultMap="diseaseResultMap">
+		select * from disease
+	</select>
+	
+	<select id="selectDiseaseNameById" parameterType="int"
+		resultType="com.neusoft.hostpital.vo.Disease">
+		select disease_name from disease where disease_id in(
+		select disease_id from
+		user_disease where user_id = #{userId}
+		)
+	</select>
+
+	<delete id="deletemiddle" parameterType="int">
+		delete from user_disease where disease_id=#{disease_id}
+	</delete>
+
+	<delete id="delete" parameterType="int">
+		delete from disease where disease_id=#{disease_id}
+	</delete>
+
+	<select id="selectOne" parameterType="int" resultMap="diseaseResultMap">
+		select * from disease where disease_id=#{disease_id}
+	</select>
+
+	<select id="selectOne1" parameterType="String" resultMap="diseaseResultMap">
+				select * from disease where disease_no like #{disease_no}
+				<!-- select * from armarium where armarium_no=#{armariumNo} -->
+	</select>
+	
+	<select id="selectdis_no" parameterType="String" resultMap="diseaseResultMap">
+		select * from disease where disease_no=#{no}
+	</select>
+		
+	<update id="updateOne" parameterType="com.neusoft.hostpital.vo.Disease">
+		update disease set disease_no=#{disease_no},disease_name=#{disease_name}
+		where disease_id=#{disease_id}
+	</update>
+
+</mapper>

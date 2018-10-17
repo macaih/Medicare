@@ -1,0 +1,71 @@
+package com.neusoft.hostpital.serviceimpl;
+
+import java.security.KeyStore.Entry.Attribute;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.neusoft.hostpital.dao.Project_ArmariumMapper;
+import com.neusoft.hostpital.service.Project_ArmariumService;
+import com.neusoft.hostpital.vo.AllAttribute;
+import com.neusoft.hostpital.vo.Project;
+import com.neusoft.hostpital.vo.Project_Armarium;
+
+@Service
+public class Project_ArmariumServiceImpl implements Project_ArmariumService  {
+	@Autowired
+	private Project_ArmariumMapper project_armariumMapper;	
+
+	//@Override
+//	public void addProArm(Project_Armarium project_armarium) {
+//		 project_armariumMapper.addProArm(project_armarium);
+//		
+//	}
+
+	@Override
+	public boolean removeProArm(Project_Armarium project_armarium) {
+			try {
+				project_armariumMapper.removeProArm(project_armarium);
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return false;
+		
+	}
+
+	@Override
+	public List<Project_Armarium> selectProjectname(int project_id) {
+		
+		return project_armariumMapper.selectProjectname(project_id);
+	}
+
+	@Override
+	public Project_Armarium getProject_id(String Project_name) {
+		return project_armariumMapper.getProject_id(Project_name);
+	}
+
+	@Override
+	public Project_Armarium getArmarium_id(String Armarium_name) {
+		return project_armariumMapper.getArmarium_id(Armarium_name);
+	}
+
+	@Override
+	public List<AllAttribute> selectArmriumByProjectId(int projectId) {
+		return project_armariumMapper.selectArmriumByProjectId(projectId);
+	}
+
+	@Override
+	public void addProArm(int projectId, String armName, int time) {
+		int armId = project_armariumMapper.getArmIdByName(armName).getArmId();
+		project_armariumMapper.addProArm(projectId, armId, time);
+	}
+
+	@Override
+	public void removeProArm(int projectId, int armId) {
+		project_armariumMapper.removeProArm(projectId, armId);
+	}
+
+}

@@ -1,0 +1,96 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta charset="UTF-8" />
+
+
+<base href="<%=basePath%>">
+<title>修改管理员</title>
+<link rel="stylesheet" href="css/reset2.css" />
+<link rel="stylesheet" href="css/style2.css" media="screen"
+	type="text/css" />
+</head>
+
+<script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+<script type="text/javascript">
+		function ck_admin() {
+		var name = $("#name").val();
+		var sex = $("#sex").val();
+		var pass = $("#pass").val();
+		if(name==''||sex==''||pass==''){
+	         alert("不能为空");
+		}
+		else if(sex!='男'&&sex!='女'){
+		alert("请输入正确的性别");
+		}else{
+		$("#SBBB").submit();
+		}
+		//location.href = "arm_update1?armariumId="+Id+"&&armariumNo="+No+"&&armariumName="+Name+"&&armariumPrice="+Price;
+	}
+</script>
+
+
+<body>
+	<div id="window" style="">
+		<div class="page page-front" style="width: 430px; height: 550px">
+			<div class="page-content">
+				<form action="updateAdminUser" method="post" id = "SBBB">
+					</div>
+					<input name="userId" id="id"
+								style="display: none; width: 0px; height: 0px" value="${user.userId}" />
+					<div class="input-row">
+						<label class="label fadeIn delay2">管理员编号</label> <input
+							name="userNo" value="${user.userNo}" id="id" type="text"
+							data-fyll="管理员编号" class="input fadeIn delay3" readonly="true"
+							style="font-size: 19px;" />
+					</div>
+					<div class="input-row">
+						<label class="label fadeIn delay2">姓名</label> <input
+							value="${user.userName}" name="userName" id="name" type="text"
+							data-fyll="姓名" class="input fadeIn delay3"
+							style="font-size: 19px;" />
+					</div>
+					<div class="input-row">
+						<label class="label fadeIn delay2">性别</label> <input
+							value="${user.userSex}" name="userSex" id="sex" type="text"
+							data-fyll="性别" class="input fadeIn delay3"
+							style="font-size: 19px;" />
+					</div>
+					<div class="input-row">
+						<label class="label fadeIn delay2">密码</label> <input 
+							value="${user.userPass}" name="userPass" id="pass" type="password"
+							data-fyll="密码" class="input fadeIn delay3"
+							style="font-size: 19px;" />
+					</div>
+
+					<div class="input-row perspective">
+						<input onclick="ck_admin()"
+							class="button load-btn fadeIn delay4 ion-arrow-right-b"
+							type="button" value="确认修改" />
+
+				<div class="load-state">
+					<div class="ball"></div>
+					<div class="ball"></div>
+					<div class="ball"></div>
+				</div>
+				</input>
+			</div>
+
+			</form>
+		</div>
+	</div>
+
+	</div>
+	</div>
+	</div>
+	</div>
+</body>
+</html>

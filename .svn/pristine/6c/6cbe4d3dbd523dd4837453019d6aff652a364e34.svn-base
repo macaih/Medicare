@@ -1,0 +1,158 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="generator" content="" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<link href="css/haiersoft.css" rel="stylesheet" type="text/css"
+	media="screen,print" />
+<link href="css/print.css" rel="stylesheet" type="text/css"
+	media="print" />
+<script src="js/jquery-1.10.1.min.js"></script>
+<script src="js/side.js" type="text/javascript"></script>
+
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+<![endif]-->
+</head>
+
+
+<style>
+.tian input {
+	height: 33px;
+	line-height: 33px;
+	vertical-align: middle;
+	border: none;
+	font-size: 16px;
+	background-color: #1fbba6;
+	padding: 0px 10px;
+	color: #FFF;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.tian2 input {
+	height: 33px;
+	line-height: 33px;
+	vertical-align: middle;
+	border: none;
+	font-size: 16px;
+	background-color: #1fbba6;
+	padding: 0px 10px;
+	color: #FFF;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+</style>
+
+<body>
+
+	<!-- Popup -->
+	<div id="Popup">
+
+		<!-- SubPopup -->
+		<div id="SubPopup">
+			<script type="text/javascript">
+				$(function() {
+					$(".select").each(
+							function() {
+								var s = $(this);
+								var z = parseInt(s.css("z-index"));
+								var dt = $(this).children("dt");
+								var dd = $(this).children("dd");
+								var _show = function() {
+									dd.slideDown(200);
+									dt.addClass("cur");
+									s.css("z-index", z + 1);
+								};
+								var _hide = function() {
+									dd.slideUp(200);
+									dt.removeClass("cur");
+									s.css("z-index", z);
+								};
+								dt.click(function() {
+									dd.is(":hidden") ? _show() : _hide();
+								});
+								dd.find("a").click(function() {
+									dt.html($(this).html());
+									_hide();
+								});
+								$("body").click(
+										function(i) {
+											!$(i.target).parents(".select")
+													.first().is(s) ? _hide()
+													: "";
+										});
+							})
+				})
+			</script>
+			<script type="text/javascript">
+				function selectUserAajx() {
+					var userNo = $("#userNo").val();
+					$
+							.ajax({
+								//dataType : "json",//返回的数据类型
+								contentType : "application/json",// 发送信息服务器的内容的编码格式
+								type : "get",
+								url : "isExistIllUser?userNo=" + userNo,
+								async : true,// 是否使用异步
+								//回调函数
+								success : function(data) {
+
+									if (data == 1) {
+										document.getElementById("isExist").innerHTML = "病人病例已经存在，不可重复添加";
+									} else if (data == 2) {
+										document.getElementById("isExist").innerHTML = "此卡号可用";
+									} else {
+										document.getElementById("isExist").innerHTML = "此卡号不可用";
+									}
+								},
+								error : function() {
+								}
+							});
+				}
+			</script>
+			<div class="form_boxC">
+				<p>
+					"<span class="f_cB">*</span>"号为必填项目
+				</p>
+
+				<table cellpadding="0" cellspacing="0">
+					<form action="addIllUser1" method="post">
+					<tr>
+						<th>用户编号 <span class="f_cB">*</span></th>
+						<td><div class="txtbox floatL" style="width: 200px;">
+								<input id="userNo" name="userNo" onblur="selectUserAajx()"
+									type="text" size="5" value=""
+									style="width: 180px; height: 32px;" />
+							</div></td>
+						<div class="tian"
+							style="position: relative; left: 350px; top: 60px;">
+							<a href="下一步1.html" target="main" class="cks"><input name=""
+								type="submit" value="下一步"
+								onmousemove="this.className='input_move'"
+								onmouseout="this.className='input_out'"
+								onblur="selectUserAajx()" /></a>
+						</div>
+						
+						<br>
+						<span id="isExist" style="color: red; font-size: 20px"></span>
+					</tr>
+					</form>
+				</table>
+
+				<!-- /Popup -->
+</body>
+</html>

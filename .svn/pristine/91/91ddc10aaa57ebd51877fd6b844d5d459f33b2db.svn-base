@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 对于用医疗设备表的操作 -->
+
+<mapper namespace="com.neusoft.hostpital.dao.ArmariumMapper">
+
+		<resultMap type="com.neusoft.hostpital.vo.Armarium" id="armariumResultMap">
+			<id property="armariumId" column="armarium_id"/>
+			<result property="armariumNo" column="armarium_no"/>
+			<result property="armariumName" column="armarium_name"/>
+			<result property="armariumPrice" column="armarium_price"/>
+		</resultMap>
+		
+		<select id="selectAll" resultMap="armariumResultMap">
+				select * from armarium
+		</select>
+		
+		<select id="selectOne" parameterType="int" resultMap="armariumResultMap">
+				select * from armarium where armarium_id=#{armariumId}
+		</select>
+		
+		<select id="selectOne1" parameterType="String" resultMap="armariumResultMap">
+				select * from armarium where armarium_no like #{armariumNo}
+				<!-- select * from armarium where armarium_no=#{armariumNo} -->
+		</select>
+		
+		<select id="select_armNo" parameterType="String" resultMap="armariumResultMap">
+				select armarium_no from armarium where armarium_no=#{armariumNo}
+		</select>
+		
+		<insert id="insertOne" parameterType="com.neusoft.hostpital.vo.Armarium" 
+				useGeneratedKeys="true">
+				insert into 
+				armarium(armarium_no,armarium_name,armarium_price) 
+				values(#{armariumNo},#{armariumName},#{armariumPrice})
+		</insert>
+		
+		<update id="updateOne" parameterType="com.neusoft.hostpital.vo.Armarium">
+				update armarium set armarium_no=#{armariumNo},armarium_name=#{armariumName},
+				armarium_price=#{armariumPrice} 
+				where armarium_id=#{armariumId}
+		</update>
+		
+		<delete id="deletepro_arm" parameterType="int">
+				delete from project_armarium where armarium_id=#{armariumId}
+				
+		</delete>
+		
+		<delete id="deletearm" parameterType="int">
+				
+				delete from armarium where armarium_id=#{armariumId}
+		</delete>
+</mapper>

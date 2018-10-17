@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.hostpital.dao.ProjectMapper">
+
+
+	<resultMap type="com.neusoft.hostpital.vo.Project" id="projectResultMap">
+		<id property="project_id" column="project_id" />
+		<result property="project_no" column="project_no" />
+		<result property="project_name" column="project_name" />
+		<result property="project_level" column="project_level" />
+	</resultMap>
+	
+	<!-- 添加数据 -->
+	<insert id="save" parameterType="com.neusoft.hostpital.vo.Project"
+		useGeneratedKeys="true">
+		insert into
+		project(project_no,project_name,project_level)
+		values(#{project_no},#{project_name},#{project_level})
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="removeProject" parameterType="int">
+		delete from project where project_id = #{project_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="updateProject" parameterType="com.neusoft.hostpital.vo.Project">
+		update project set project_no=#{project_no},project_name=#{project_name},
+		project_level=#{project_level} 
+		where project_id=#{project_id}
+	</update>
+	<!-- 全查询 -->
+	<select id="selectAllProject" resultMap="projectResultMap">
+		select * from project
+	</select>
+	
+	<!-- 单查询 -->
+	<select id="selectProjectById" parameterType="int"  resultMap="projectResultMap">
+		select * from project where project_id = #{project_id}
+	</select>
+	
+	<select id="selectProject1" parameterType="String" resultMap="projectResultMap">
+		select * from project where project_no=#{project_no}
+		</select>
+</mapper>

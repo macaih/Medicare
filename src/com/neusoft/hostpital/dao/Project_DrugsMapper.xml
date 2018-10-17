@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.hostpital.dao.Project_DrugsMapper">
+	<resultMap type="com.neusoft.hostpital.vo.Project" id="projectResultMap">
+
+		<id property="project_id" column="project_id" />
+		<result property="project_no" column="project_no" />
+		<result property="project_name" column="project_name" />
+		<result property="project_level" column="project_level" />
+		
+		<!-- 多对多映射 -->
+		<collection property="drugs" ofType="com.neusoft.hostpital.vo.Drugs"
+			column="drugs_id" select="com.neusoft.hostpital.dao.Project_DrugsMapper.selectDrugsName">
+		<id property="project_id" column="project_id" />
+		<result property="drugs_id" column="drugs_id" />
+		<result property="drugs_no" column="drugs_no" />
+		<result property="drugs_name" column="drugs_name" />
+		<result property="drugsamount" column="amount" />
+		</collection>
+		
+		
+	</resultMap>
+	
+	<resultMap type="com.neusoft.hostpital.vo.Drugs" id="drugsResultMap">
+		<id property="drugs_id" column="drugs_id" />
+		<result property="project_id" column="project_id"/>
+		<result property="drugs_no" column="drugs_no" />
+		<result property="drugs_name" column="drugs_name" />
+		<result property="drugs_type" column="drugs_type" />
+		<result property="drugs_price" column="drugs_price" />
+	</resultMap>
+	<resultMap type="com.neusoft.hostpital.vo.Project_Drugs" id="projectdrugsResultMap">
+
+		<id property="prodr_id" column="prodr_id" />
+		<result property="project_id" column="project_id" />
+		<result property="drugs_id" column="drugs_id" />
+		<result property="drugs_no" column="drugs_no" />
+		<result property="drugs_name" column="drugs_name" />
+		<result property="drugsamount" column="amount" />
+	</resultMap>
+	
+	
+	<!-- 添加数据 -->
+	<insert id="save" parameterType="com.neusoft.hostpital.vo.Project_Drugs"
+		useGeneratedKeys="true">
+		insert into
+		project_drugs(project_id,drugs_id,amount)
+		values(#{project_id},#{drugs_id},#{drugsamount})
+	</insert>
+
+	<!-- 全查询 -->
+	<select id="selectAllProject" resultMap="projectResultMap">
+		select * from project
+	</select>
+	<!-- 全查询1 -->
+	<select id="selectAllProdr" resultMap="projectdrugsResultMap">
+		select * from project_drugs
+	</select>
+	<select id="selectAllProjectId" resultMap="projectResultMap">
+		select project_id from hospital.project_drugs
+	</select>
+	<select id="selectDrugsName" resultMap="projectdrugsResultMap" parameterType="int">
+		select pd.project_id, d.drugs_id, d.drugs_no, d.drugs_name,
+		pd.amount FROM drugs d,project_drugs pd,project p
+        where pd.project_id=p.project_id and pd.drugs_id=d.drugs_id
+	</select>
+	
+	
+	<!-- 根据项目号ID查询药品信息 -->
+	<select id="selectDrugsById" resultMap="drugsResultMap"
+		parameterType="int">
+		select * from drugs where drugs_id
+		in (select drugs_id from project_drugs where project_id = #{id})
+	</select>
+	
+	<!-- 单查询 -->
+	<select id="selectProdrById" parameterType="int"  resultMap="projectdrugsResultMap">
+		select * from project_drugs where prodr_id =#{id}
+	</select>
+	
+	<!-- 删除 -->
+	<delete id="removeProdr" parameterType="int" >
+		delete from project_drugs where prodr_id = #{id}
+	</delete>
+	<!-- 删除 -->
+	<delete id="removeDrugs" parameterType="int" >
+		delete from project_drugs where project_id=#{id} and drugs_id=#{id1};
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="updateProjectDrugs" parameterType="com.neusoft.hostpital.vo.Project_Drugs">
+		update project_drugs set project_id=#{project_id},drugs_id=#{drugs_id},
+		amount=#{drugsamount} 
+		where prodr_id=#{prodr_id}
+	</update>
+	<!-- 删除药品 -->
+	<delete id="removeProDru" parameterType="int">
+		delete from
+		project_drugs where project_id = #{param1} and
+		drugs_id=#{param2}
+	</delete>
+	
+	
+
+
+
+
+
+</mapper>

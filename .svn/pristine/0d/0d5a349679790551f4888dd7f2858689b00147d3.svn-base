@@ -1,0 +1,199 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<base href="<%=basePath%>">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="generator" content="" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<link href="css/haiersoft.css" rel="stylesheet" type="text/css"
+	media="screen,print" />
+<link href="css/print.css" rel="stylesheet" type="text/css"
+	media="print" />
+<script src="js/jquery-1.10.1.min.js"></script>
+<script src="js/side.js" type="text/javascript"></script>
+</head>
+<body>
+	<div id="Popup">
+		<div id="SubPopup">
+			<script type="text/javascript">
+				$(
+						function() {
+							$(".select").each(
+									function() {
+										var s = $(this);
+										var z = parseInt(s.css("z-index"));
+										var dt = $(this).children("dt");
+										var dd = $(this).children("dd");
+										var _show = function() {
+											dd.slideDown(200);
+											dt.addClass("cur");
+											s.css("z-index", z + 1);
+										};
+										var _hide = function() {
+											dd.slideUp(200);
+											dt.removeClass("cur");
+											s.css("z-index", z);
+										};
+										dt.click(function() {
+											dd.is(":hidden") ? _show()
+													: _hide();
+										});
+										dd.find("a").click(function() {
+											dt.html($(this).html());
+											_hide();
+										});
+										$("body").click(
+												function(i) {
+													!$(i.target).parents(
+															".select").first()
+															.is(s) ? _hide()
+															: "";
+												});
+									})
+						})
+						
+					function add_Hospital() {
+					var No = $("#hno").val();
+					var Name = $("#hname").val();
+					var Phone = $("#hphone").val();
+					if (No == '' || Name == '' || Phone == '') {
+						alert("所有输入不能为空");
+						location.href = "<%=basePath%>Hospital_add";
+					} 
+					else {
+						$("#hh").submit();
+						alert("添加成功")
+					}
+				}
+				
+	function checkhospital_no(){
+	var hno=$("#hno").val();
+	$.ajax({
+	type:"GET",
+	url:"checkhospital_no?hospital_no="+hno,
+	async:true,
+	success:function(data){
+		var check="医疗机构编号重复！";
+		var check1="";
+		if(data!=''){
+		alert(check);
+		location.href = "<%=basePath%>Hospital_add";
+		}
+		else{
+		$("#ck").html(check1);
+		}
+	}
+	});
+	}
+function prevent(e) {  
+    e.preventDefault ? e.preventDefault() : e.returnValue = false;  
+}  
+	function digitInput(el, e) {  
+    var ee = e || window.event; // FF、Chrome IE下获取事件对象  
+    var c = e.charCode || e.keyCode; //FF、Chrome IE下获取键盘码  
+ 
+    var val = el.val();  
+    if (c == 110 || c == 190){ // 110 (190) - 小(主)键盘上的点  
+        (val.indexOf(".") >= 0 || !val.length) && prevent(e); // 已有小数点或者文本框为空，不允许输入点  
+    } else {  
+        if ((c != 8 && c != 46 && // 8 - Backspace, 46 - Delete  
+            (c < 37 || c > 40) && // 37 (38) (39) (40) - Left (Up) (Right) (Down) Arrow  
+            (c < 48 || c > 57) && // 48~57 - 主键盘上的0~9  
+            (c < 96 || c > 105)) // 96~105 - 小键盘的0~9  
+            || e.shiftKey) {  
+            prevent(e); // 阻止事件传播到keypress  
+        }  
+    }  
+}  
+$(function(){  
+    $("input[name='hospital_phone']").keydown(function(e) {  
+        digitInput($(this), e);  
+    });  
+});
+function update_Hospitala() {
+	var check1="";
+	var Phone = document.getElementById("hphone").value.length;
+	if(Phone!="11"){
+ 		alert("请输入11位电话号码");
+ 		location.href = "<%=basePath%>Hospital_add";
+ 	}
+ 	else{
+		$("#ck").html(check1);
+		}
+	}
+			</script>
+			<form action="Hospital_add" method="post" id="hh">
+				<div class="form_boxC">
+					<p>
+						"<span class="f_cB">*</span>"号为必填项目
+					</p>
+					<table cellpadding="0" cellspacing="0" style="position:relative;top: 40px ">
+						<tr>
+							<th width="120">医疗机构编号 <span class="f_cB">*</span></th>
+							<td><div class="txtbox floatL" style="width: 200px;">
+									<input id="hno" oninput="checkhospital_no()" name="hospital_no" type="text" size="5" value=""
+										style="width: 180px; height: 35px;">
+								</div></td>
+								<th id="ck" style="color: red"></th>
+						</tr>
+						<tr>
+							<th>医疗机构名称 <span class="f_cB">*</span></th>
+							<td><div class="txtbox floatL" style="width: 200px;">
+									<input id="hname" name="hospital_name" type="text" size="5" value=""
+							onkeyup="this.value=this.value.replace(/(^\s+)|(\s+$)/g,'');"			style="width: 180px; height: 35px">
+								</div></td>
+						</tr>
+						<tr>
+							<th>医疗机构等级<span class="f_cB">*</span></th>
+							<td><select name="hospital_level"
+								style="height: 35px; width: 90px">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+							</select></td>
+						</tr>
+						<tr>
+							<th>医疗机构电话<span class="f_cB">*</span></th>
+							<td><div class="txtbox floatL" style="width: 200px;">
+									<input id="hphone" name="hospital_phone" onblur="update_Hospitala()" type="text" size="5" value=""
+										style="width: 180px; height: 35px">
+								</div></td>
+							
+							<td>
+
+								<div style="position: relative; left: 1000px; top: -200px">
+									<div class="btn_boxB floatR mag_l20">
+										<input name="" type="reset" value="取消"
+											onmousemove="this.className='input_move'"
+											onmouseout="this.className='input_out' ">
+									</div>
+									<div class="btn_box floatR">
+										<input name="" type="button" onclick="add_Hospital()" value="提交"
+											onmousemove="this.className='input_move'"
+											onmouseout="this.className='input_out'">
+									</div>
+								</div>
+							</td>
+
+						</tr>
+						
+			</table>
+			</div>
+			</form>
+			</div>
+			</div>
+</body>
+</html>

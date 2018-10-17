@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.hostpital.dao.User_ProjectMapper">
+	<!-- 结果映射 -->
+	<resultMap type="com.neusoft.hostpital.vo.User_Project" id="user_ProjectResultMap">
+		<id property="user_id" column="user_id" />
+		<result property="project_id" column="project_id" />
+		<result property="time" column="time" />
+	</resultMap>
+	
+	<!-- 添加数据 -->
+	<insert id="save" parameterType="com.neusoft.hostpital.vo.User_Project"
+		useGeneratedKeys="true">
+		insert into
+		user_project(user_id,project_id,time)
+		values(#{user_id},#{project_id},#{time})
+	</insert>
+	
+	<!-- 查询所有用户的ID -->
+	<select id="selectAllUserId" resultMap="user_ProjectResultMap">
+		select user_id from user
+	</select>
+
+	<!-- 查询所有项目的ID -->
+	<select id="selectAllProjectId" resultMap="user_ProjectResultMap">
+		select project_id from
+		project
+	</select>
+
+	<!-- 全查询 -->
+	<select id="selectAllUserProject" resultMap="user_ProjectResultMap">
+		select * from
+		user_project
+	</select>
+
+	<!-- 删除 -->
+	<delete id="removeUserProject" parameterType="int">
+		delete from
+		user_project where u_p_id = #{u_p_id}
+	</delete>
+	
+	<!-- 单查询 -->
+	<select id="selectUserProjectById" parameterType="int"  resultMap="user_ProjectResultMap">
+		select * from user_project where u_p_id = #{u_p_id}
+	</select>
+	
+	
+	<!-- 修改 -->
+	<update id="updateUserProject" parameterType="com.neusoft.hostpital.vo.User_Project">
+		update user_project
+		set time=#{time}
+		where u_p_id = #{u_p_id}
+		order by u_p_id
+	</update>
+</mapper>

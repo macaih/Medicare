@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 对于用户表的操作 -->
+<mapper namespace="com.neusoft.hostpital.dao.UserMapper">
+	<resultMap type="com.neusoft.hostpital.vo.User" id="illUserResultMap">
+		<id property="userId" column="user_id" />
+		<result property="userNo" column="user_no" />
+		<result property="userName" column="user_name" />
+		<result property="userSex" column="user_sex" />
+		<result property="userPass" column="user_pass" />
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.User" id="userPowerAndNameResultMap">
+		<result property="userName" column="user_name" />
+		<result property="userPower" column="user_power" />
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.User" id="userUpdateResultMap">
+		<id property="userId" column="user_id" />
+		<result property="userNo" column="user_no" />
+		<result property="userName" column="user_name" />
+		<result property="userSex" column="user_sex" />
+		<result property="userWork" column="user_work" />
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.User" id="adminUpdateResultMap">
+		<id property="userId" column="user_id" />
+		<result property="userNo" column="user_no" />
+		<result property="userName" column="user_name" />
+		<result property="userPass" column="user_pass" />
+		<result property="userSex" column="user_sex" />
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.User" id="adminResultMap">
+		<id property="userId" column="user_id" />
+		<result property="userNo" column="user_no" />
+		<result property="userName" column="user_name" />
+		<result property="userPass" column="user_pass" />
+		<result property="userSex" column="user_sex" />
+		<result property="userPower" column="user_power" />
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.User" id="ordinaryUserResultMap">
+		<id property="userId" column="user_id" />
+		<result property="userNo" column="user_no" />
+		<result property="userName" column="user_name" />
+		<result property="userSex" column="user_sex" />
+		<result property="userWork" column="user_work" />
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="userProjectResultMap">
+		<id property="userId" column="user_id" />
+		<id property="projectId" column="project_id" />
+		<result property="projectNo" column="project_no" />
+		<result property="projectName" column="project_name" />
+		<result property="projectTime" column="time" />
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="userDiseaseResultMap">
+		<id property="userId" column="user_id" />
+		<id property="diseaseId" column="disease_id" />
+		<result property="diseaseNo" column="disease_no" />
+		<result property="diseaseName" column="disease_name" />
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="pidResultMap">
+		<id property="projectId" column="project_id" />
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="didResultMap">
+		<id property="diseaseId" column="disease_id" />
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.User" id="userIsExistResultMap">
+		<id property="userId" column="user_id" />
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="userIdResultMap">
+		<id property="userId" column="user_id" />
+	</resultMap>
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="ProIdAndProTimeResultMap">
+		<id property="projectId" column="project_id" />
+		<result property="projectTime" column="time" />
+	</resultMap>	
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="selectdrugNResultMap">
+		<id property="projectId" column="project_id" />
+		<id property="drugsId" column="drugsId" />
+		<result property="drugsName" column="drugs_name" />
+	</resultMap>
+
+	<select id="selectdrugN" parameterType="com.neusoft.hostpital.vo.AllAttribute" resultMap="selectdrugNResultMap">
+			select drugs_name from drugs
+	</select>
+	
+	<!--********************  -->
+	<select id="ckdruname" parameterType="com.neusoft.hostpital.vo.AllAttribute" resultMap="selectdrugNResultMap">
+			select drugs_name from drugs where drugs_name=#{drugsName}
+	</select>
+
+	<select id="getProIdAndProTime" parameterType="int"
+		resultMap="ProIdAndProTimeResultMap">
+		select project_id,time from user_project where user_id =
+		#{user_id}
+	</select>
+
+	<select id="isExistUser" parameterType="String" resultMap="userIsExistResultMap">
+		select user_id from user where user_no =
+		#{userNo}
+	</select>
+
+	<select id="select_userNP" parameterType="String" resultMap="illUserResultMap">
+		select user_pass from user where user_no=#{userNo} and
+		user_pass=#{userPass}
+	</select>
+
+	<select id="isExistIllUser" parameterType="String" resultMap="userIsExistResultMap">
+		select user_id from user_disease where user_id in(
+		select user_id from
+		user where user_no =
+		#{userNo}
+		)
+	</select>
+
+	<insert id="addOrdinaryUser" parameterType="com.neusoft.hostpital.vo.User"
+		useGeneratedKeys="true">
+		insert into
+		user(user_no,user_name,user_sex,user_work,user_power)
+		values(#{userNo},#{userName},#{userSex},#{userWork},#{userPower})
+	</insert>
+
+	<select id="adminLogin" parameterType="String"
+		resultMap="userPowerAndNameResultMap">
+		select user_name,user_power from user where
+		user_no=#{param1} and user_pass=#{param2}
+	</select>
+
+	<delete id="removeOrdinaryUser" parameterType="int">
+		delete from user
+		where user_id = #{userId}
+	</delete>
+
+	<select id="selectOrdinaryUser" parameterType="String"
+		resultMap="ordinaryUserResultMap">
+		select user_id,user_no,user_name,user_sex,user_work from
+		user where
+		user_no like #{userNo} and user_power = 0
+	</select>
+
+	<select id="selectOrdinaryUpdateUser" parameterType="int"
+		resultMap="userUpdateResultMap">
+		select user_id,user_no,user_name,user_sex,user_work from
+		user where
+		user_id = #{userId}
+	</select>
+
+	<update id="updateOrdinaryUser" parameterType="com.neusoft.hostpital.vo.User">
+		update user set
+		user_no=#{userNo},
+		user_name=#{userName},
+		user_sex=#{userSex},
+		user_work=#{userWork}
+		where user_id=#{userId}
+	</update>
+
+	<insert id="addAdminUser" parameterType="com.neusoft.hostpital.vo.User"
+		useGeneratedKeys="true">
+		insert into
+		user(user_no,user_name,user_sex,user_pass,user_power)
+		values(#{userNo}, #{userName},#{userSex},#{userPass}, #{userPower})
+
+
+
+	</insert>
+
+	<select id="selectAdminUserByNo" parameterType="String"
+		resultMap="adminResultMap">
+		select user_id,user_no,user_name,user_sex from
+		user where
+		user_no like #{userNo} and user_power = 1
+	</select>
+
+	<delete id="removeAdminUser" parameterType="int">
+		delete from user
+		where user_id = #{userId}
+	</delete>
+
+	<select id="selectAdminUpdateUser" parameterType="int"
+		resultMap="adminUpdateResultMap">
+		select user_id,user_no,user_name,user_sex,user_pass from
+		user where
+		user_id = #{userId}
+	</select>
+
+	<update id="updateAdminUser" parameterType="com.neusoft.hostpital.vo.User">
+		update user set
+		user_no=#{userNo},
+		user_name=#{userName},
+		user_sex=#{userSex},
+		user_pass=#{userPass}
+		where
+		user_id=#{userId}
+	</update>
+
+	<select id="selectIllUser" parameterType="String" resultMap="illUserResultMap">
+		select * from user where
+		user_id in(select user_id from user_disease)
+		and user_no like
+		#{userNo}
+	</select>
+
+	<select id="selectProjectNameById" parameterType="int"
+		resultType="com.neusoft.hostpital.vo.Project">
+		select project_name from project where project_id in(
+		select project_id from
+		user_project where user_id = #{userId}
+		)
+	</select>
+
+	<delete id="removeIllUserDisesase" parameterType="int">
+		delete from
+		user_disease where user_id = #{userId}
+	</delete>
+
+	<delete id="removeIllUserProject" parameterType="int">
+		delete from
+		user_project where user_id = #{userId}
+	</delete>
+
+	<select id="selectProjectByUserId" parameterType="int"
+		resultMap="userProjectResultMap">
+		select up.user_Id,p.project_id,p.project_no,p.project_name,up.time 
+		from user_project up,project p
+		where up.project_id = p.project_id and
+		up.user_id = #{userId}
+	</select>
+
+	<select id="selectDiseaseByUserId" parameterType="int"
+		resultMap="userDiseaseResultMap">
+		select ud.user_id,ud.disease_id,d.disease_no,d.disease_name
+		from
+		user_disease ud,disease d
+		where ud.disease_id = d.disease_id and
+		ud.user_id = #{userId}
+	</select>
+
+	<delete id="removeUserProject" parameterType="int">
+		delete from
+		user_project where user_id = #{param1} and project_id = #{param2}
+	</delete>
+
+	<delete id="removeUserDisesase" parameterType="int">
+		delete from
+		user_disease where user_id = #{param1} and disease_id = #{param2}
+	</delete>
+
+	<select id="selectPidByPname" parameterType="String" resultMap="pidResultMap">
+		select project_id from project where project_name = #{projectName}
+	</select>
+
+	<insert id="addUserRroject" parameterType="int">
+		insert into
+		user_project(user_id,project_id,time)
+		values(#{param1},#{param2},#{param3})
+	</insert>
+
+	<select id="selectDidByDname" parameterType="String" resultMap="didResultMap">
+		select disease_id from disease where disease_name = #{diseaseName}
+	</select>
+
+	<insert id="addUserDisease" parameterType="int">
+		insert into
+		user_disease(user_id,disease_id)
+		values(#{param1},#{param2})
+	</insert>
+
+	<select id="selectUserIdByUserNo" parameterType="String"
+		resultMap="userIdResultMap">
+		select user_id from user where user_no = #{userNo}
+	</select>
+
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="armIdAndTimeResultMap">
+		<id property="armId" column="armarium_id" />
+		<result property="proArmTime" column="day" />
+	</resultMap>
+
+	<select id="getArmIdAndDay" parameterType="int"
+		resultMap="armIdAndTimeResultMap">
+		select armarium_id,day from project_armarium where
+		project_id = #{projectId}
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="armPirceResultMap">
+		<result property="armPrice" column="armarium_price" />
+	</resultMap>
+
+	<select id="getArmPrice" parameterType="int" resultMap="armPirceResultMap">
+		select
+		armarium_price from armarium where armarium_id = #{armariumId}
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="drugsIdAndAmountResultMap">
+		<id property="drugsId" column="drugs_id" />
+		<result property="proDrugsAmount" column="amount" />
+	</resultMap>
+
+	<select id="getDrugsIdAndAmount" parameterType="int"
+		resultMap="drugsIdAndAmountResultMap">
+		select drugs_id,amount from project_drugs where project_id =
+		#{projectId}
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="drugsPriceAndTypeResultMap">
+		<result property="drugsType" column="drugs_type" />
+		<result property="drugsPrice" column="drugs_price" />
+	</resultMap>
+
+	<select id="getDrugsPriceAndType" parameterType="int"
+		resultMap="drugsPriceAndTypeResultMap">
+		select drugs_type,drugs_price from drugs where drugs_id =
+		#{drugs_id}
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.User" id="userNameAndNoResultMap">
+		<result property="userName" column="user_name" />
+		<result property="userNo" column="user_No" />
+	</resultMap>
+
+	<select id="getUserNameAndNo" parameterType="String"
+		resultMap="userNameAndNoResultMap">
+		select user_name,user_no from user where user_no = #{userNo}
+	</select>
+
+	<insert id="addProject" parameterType="String">
+		insert into
+		project(project_no,project_name,project_level)
+		values(#{param1},#{param2},#{param3})
+	</insert>
+
+	<resultMap type="com.neusoft.hostpital.vo.Project" id="projectIdResultMap">
+		<id property="project_id" column="project_id" />
+	</resultMap>
+
+	<select id="getProjectIdByNo" parameterType="String" resultMap="projectIdResultMap">
+		select project_id from project where project_no = #{projectNo}
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.Armarium" id="armIdByNameResultMap">
+		<result property="armariumId" column="armarium_id" />
+	</resultMap>
+
+	<select id="getArmIdByName" parameterType="String" resultMap="armIdByNameResultMap">
+		select armarium_id from armarium where armarium_name = #{armName}
+	</select>
+
+	<insert id="addProjectArm" parameterType="int">
+		insert into
+		project_armarium(project_id,armarium_id,day)
+		values(#{param1},#{param2},#{param3})
+	</insert>
+
+	<resultMap type="com.neusoft.hostpital.vo.Drugs" id="drugsIdResultMap">
+		<result property="drugs_id" column="drugs_id" />
+	</resultMap>
+
+	<select id="getdrugsIdByName" parameterType="String" resultMap="drugsIdResultMap">
+		select drugs_id from drugs where drugs_name = #{drugsName}
+	</select>
+
+	<insert id="addProjectDrugs" parameterType="int">
+		insert into
+		project_drugs(project_id,drugs_id,amount)
+		values(#{param1},#{param2},#{param3})
+	</insert>
+
+	<resultMap type="com.neusoft.hostpital.vo.Project" id="projectResultMap">
+		<id property="project_id" column="project_id" />
+		<result property="project_no" column="project_no" />
+		<result property="project_name" column="project_name" />
+		<result property="project_level" column="project_level" />
+	</resultMap>
+
+	<select id="getLikeProject" parameterType="String" resultMap="projectResultMap">
+		select * from project where project_no like #{projectNo}
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.AllAttribute" id="drugsResultMap">
+		<id property="projectId" column="project_id" />
+		<id property="drugsId" column="drugs_id" />
+		<result property="drugsNo" column="drugs_no" />
+		<result property="drugsName" column="drugs_name" />
+		<result property="proDrugsAmount" column="amount" />
+	</resultMap>
+
+	<select id="getDrugsByProjectId" parameterType="int" resultMap="drugsResultMap">
+		select pd.project_id,pd.drugs_id,d.drugs_no,d.drugs_name,pd.amount
+		from project_drugs pd,drugs d where pd.drugs_id = d.drugs_id
+		and
+		pd.project_id = #{projectId}
+	</select>
+
+	<delete id="removeProDrugs" parameterType="int">
+		delete from
+		project_drugs where project_id = #{param1} and drugs_id = #{param2}
+	</delete>
+
+	<delete id="delProjectArmarium" parameterType="int">
+		delete from
+		project_armarium where project_id = #{projectId}
+	</delete>
+
+	<delete id="delProjectDrugs" parameterType="int">
+		delete from
+		project_drugs where project_id = #{projectId}
+	</delete>
+
+	<delete id="delUserProject" parameterType="int">
+		delete from
+		user_project where project_id = #{projectId}
+	</delete>
+
+	<delete id="delProject" parameterType="int">
+		delete from
+		project where
+		project_id = #{projectId}
+	</delete>
+
+	<select id="selectUserByUserNo" parameterType="String"
+		resultMap="userResultMap">
+		select user_id,user_work from user where user_no = #{userNo}
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.User" id="userResultMap">
+		<id property="userId" column="user_id" />
+		<result property="userWork" column="user_work" />
+	</resultMap>
+
+	<!-- 编号对比是否重复查询 -->
+	<select id="select_userNo" parameterType="String" resultMap="adminResultMap">
+		select user_no from user where user_no=#{userNo}
+	</select>
+
+	<select id="isExistUser2" parameterType="String" resultMap="userResultMap">
+		select user_id,user_work from user where user_no = #{userNo}
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.Project" id="projectNoResultMap">
+		<result property="project_no" column="project_no" />
+	</resultMap>
+
+	<select id="isExistProjectNo" parameterType="String" resultMap="projectNoResultMap">
+		select project_no from project where project_no = #{project_no}
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.Project" id="projectNameResultMap">
+		<result property="project_name" column="project_name" />
+	</resultMap>
+
+	<select id="isExistProjectName" parameterType="String"
+		resultMap="projectNameResultMap">
+		select project_name from project where project_name =
+		#{project_name}
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.Disease" id="diseaseNameResultMap">
+		<result property="Disease_name" column="disease_name" />
+	</resultMap>
+
+	<select id="isExistDiseaseName" parameterType="String"
+		resultMap="diseaseNameResultMap">
+		select disease_name from disease where disease_name =
+		#{disease_name}
+	</select>
+
+	<delete id="delProjectUser" parameterType="int">
+		delete from
+		user_project where
+		user_id = #{userId}
+	</delete>
+
+	<delete id="delDiseaseUser" parameterType="int">
+		delete from
+		user_disease where
+		user_id = #{userId}
+	</delete>
+
+	<resultMap type="com.neusoft.hostpital.vo.Armarium" id="armariumNameResultMap">
+		<result property="armariumName" column="armarium_name" />
+	</resultMap>
+
+	<select id="isExistArmariumName" parameterType="String"
+		resultMap="armariumNameResultMap">
+		select armarium_name from armarium where armarium_name =
+		{#armariumName}
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.Armarium" id="armariumResultMap">
+		<result property="armariumName" column="armarium_name" />
+	</resultMap>
+
+	<select id="getAllArmName" parameterType="String" resultMap="armariumResultMap">
+		select armarium_name from armarium
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.Drugs" id="drugsNameResultMap">
+		<result property="drugs_name" column="drugs_name" />
+	</resultMap>
+
+	<select id="getAllDrugsName" resultMap="drugsNameResultMap">
+		select drugs_name from
+		drugs
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.Disease" id="diseaseResultMap">
+		<result property="Disease_name" column="disease_name" />
+	</resultMap>
+
+	<select id="getAllDiseaseName" resultMap="diseaseResultMap">
+		select disease_name
+		from
+		disease
+	</select>
+
+	<resultMap type="com.neusoft.hostpital.vo.Project" id="projecetNameResultMap">
+		<result property="project_name" column="project_name" />
+	</resultMap>
+
+	<select id="getAllProjectName" resultMap="projecetNameResultMap">
+		select project_name
+		from
+		project
+	</select>
+</mapper>
